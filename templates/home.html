@@ -1,26 +1,33 @@
+<!-- templates/home.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
 </head>
 <body>
+    <h1>Welcome to Our Store</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'view_cart' %}">Cart</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'user_profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
     <form method="get" action="{% url 'search_results' %}">
-        <input type="text" name="q" placeholder="Search products..." value="{{ query }}">
+        <input type="text" name="q" placeholder="Search for products...">
         <button type="submit">Search</button>
     </form>
-    <h1>Categories</h1>
+    <h2>Categories</h2>
     <ul>
         {% for category in categories %}
             <li><a href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
         {% endfor %}
     </ul>
-    {% if products %}
-        <h2>Search Results</h2>
-        <ul>
-            {% for product in products %}
-                <li><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 </body>
 </html>

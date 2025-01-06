@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product,ProductImage
+from .models import Category, Product,ProductImage, Cart, CartItem, Order, Payment
 from adminsortable2.admin import SortableTabularInline
 
 @admin.register(Category)
@@ -20,3 +20,8 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('product', 'image')
+
+admin.site.register(Cart)
+admin.site.register(CartItem)
+admin.site.register(Order)
+admin.site.register(Payment)

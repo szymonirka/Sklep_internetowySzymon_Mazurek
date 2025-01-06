@@ -1,0 +1,22 @@
+<!-- templates/process_payment.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Payment</title>
+    <script>
+        function showSuccessMessage() {
+            document.getElementById('message').innerText = 'Zamówienie przebiegło pomyślnie';
+            setTimeout(function() {
+                window.location.href = '/';
+            }, 5000);
+        }
+        window.onload = function() {
+            setTimeout(showSuccessMessage, 5000);
+        }
+    </script>
+</head>
+<body>
+    <h1>Processing Payment</h1>
+    <p id="message">Proszę czekać...</p>
+</body>
+</html>

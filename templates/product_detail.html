@@ -28,12 +28,14 @@
 <body>
     <div class="product-detail">
         <h1>{{ product.name }}</h1>
+     <a href="{% url 'category_products' product.category.id %}" class="button">Back to Category</a>
         <div class="product-images">
             {% for image in images %}
                 <img src="{{ image.image.url }}" alt="{{ product.name }}">
             {% endfor %}
         </div>
         <p>{{ product.price }} PLN</p>
+        <a href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
         <nav>
             <a href="#description">Description</a>
             <a href="#specifications">Specifications</a>
