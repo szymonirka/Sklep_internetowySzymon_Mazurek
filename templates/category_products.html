@@ -1,0 +1,38 @@
+<!-- templates/category_products.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }}</title>
+</head>
+<body>
+    <form method="get" action="{% url 'search_results' %}">
+        <input type="text" name="q" placeholder="Search products in this category..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+    <h1>{{ category.name }}</h1>
+    <div class="subcategories">
+        <h2>Subcategories</h2>
+        <ul>
+            {% for subcategory in subcategories %}
+                <li><a href="{% url 'category_products' subcategory.id %}">{{ subcategory.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product-item">
+                <a href="{% url 'product_detail' product.id %}">
+                    {% if product.images.first %}
+                        <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.price }} PLN</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'home' %}">Back to Categories</a>
+</body>
+</html>

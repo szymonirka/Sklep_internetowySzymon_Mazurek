@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <form method="get" action="{% url 'search_results' %}">
+        <input type="text" name="q" placeholder="Search products..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+    <h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% if products %}
+        <h2>Search Results</h2>
+        <ul>
+            {% for product in products %}
+                <li><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

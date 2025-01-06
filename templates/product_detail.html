@@ -1,0 +1,56 @@
+<!-- templates/product_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.name }}</title>
+    <style>
+        .product-detail {
+            max-width: 800px;
+            margin: auto;
+        }
+        .product-detail img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-detail nav {
+            margin-bottom: 20px;
+        }
+        .product-detail nav a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: blue;
+        }
+        .product-detail section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="product-detail">
+        <h1>{{ product.name }}</h1>
+        <div class="product-images">
+            {% for image in images %}
+                <img src="{{ image.image.url }}" alt="{{ product.name }}">
+            {% endfor %}
+        </div>
+        <p>{{ product.price }} PLN</p>
+        <nav>
+            <a href="#description">Description</a>
+            <a href="#specifications">Specifications</a>
+            <a href="#accessories">Accessories</a>
+        </nav>
+        <section id="description">
+            <h2>Description</h2>
+            <p>{{ product.description }}</p>
+        </section>
+        <section id="specifications">
+            <h2>Specifications</h2>
+            <p>{{ product.specifications }}</p>
+        </section>
+        <section id="accessories">
+            <h2>Accessories</h2>
+            <p>{{ product.accessories }}</p>
+        </section>
+    </div>
+</body>
+</html>
