@@ -1,8 +1,82 @@
-<!-- templates/view_cart.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>View Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koszyk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: #004d99;
+        }
+        .product-list {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .product-item img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+        .product-item h2 {
+            color: #0066cc;
+        }
+        .product-item .product-price,
+        .product-item .product-quantity {
+            margin: 0 10px;
+        }
+        .product-item form {
+            margin: 0 5px;
+        }
+        .product-item button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #0066cc;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .product-item button:hover {
+            background-color: #004d99;
+        }
+        h2 {
+            text-align: center;
+        }
+        #total-sum {
+            font-weight: bold;
+            color: #0066cc;
+        }
+    </style>
     <script>
         function updateTotalSum() {
             let totalSum = 0;
@@ -18,7 +92,6 @@
             document.querySelectorAll('.quantity-form').forEach(form => {
                 form.addEventListener('submit', event => {
                     event.preventDefault();
-                    // Simulate quantity change and update total sum
                     const quantityElement = form.closest('.product-item').querySelector('.product-quantity');
                     if (form.classList.contains('increase')) {
                         quantityElement.innerText = parseInt(quantityElement.innerText) + 1;
@@ -33,37 +106,39 @@
     </script>
 </head>
 <body>
-    <h1>Your Cart</h1>
-    <a href="{% url 'home' %}" class="button">Go to Home</a>
+    <h1>Twój Koszyk</h1>
+    <a href="{% url 'home' %}" class="button">Powrót na Stronę Główną</a>
     <div class="product-list">
         {% for item in cart_items %}
             <div class="product-item">
                 <a href="{% url 'product_detail' item.product.id %}">
                     {% if item.product.images.first %}
-                        <img src="{{ item.product.images.first.image.url }}" alt="{{ item.product.name }}" style="width: 100px; height: auto;">
+                        <img src="{{ item.product.images.first.image.url }}" alt="{{ item.product.name }}">
                     {% else %}
-                        <p>No image available</p>
+                        <p>Brak zdjęcia</p>
                     {% endif %}
+                </a>
+                <div>
                     <h2>{{ item.product.name }}</h2>
                     <p class="product-price">{{ item.product.price }} PLN</p>
-                    <p class="product-quantity">{{ item.quantity }}</p> <!-- Display the quantity here -->
-                </a>
-                <form method="post" action="{% url 'increase_quantity' item.product.id %}" class="quantity-form increase" style="display:inline;">
+                    <p class="product-quantity">{{ item.quantity }}</p>
+                </div>
+                <form method="post" action="{% url 'increase_quantity' item.product.id %}" class="quantity-form increase">
                     {% csrf_token %}
                     <button type="submit">+</button>
                 </form>
-                <form method="post" action="{% url 'decrease_quantity' item.product.id %}" class="quantity-form decrease" style="display:inline;">
+                <form method="post" action="{% url 'decrease_quantity' item.product.id %}" class="quantity-form decrease">
                     {% csrf_token %}
                     <button type="submit">-</button>
                 </form>
-                <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">
+                <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
                     {% csrf_token %}
-                    <button type="submit">Remove</button>
+                    <button type="submit">Usuń</button>
                 </form>
             </div>
         {% endfor %}
     </div>
-    <h2>Total Sum: <span id="total-sum">{{ total_sum }} PLN</span></h2>
-    <a href="{% url 'checkout' %}">Proceed to Checkout</a>
+    <h2>Łączna suma: <span id="total-sum">{{ total_sum }} PLN</span></h2>
+    <a href="{% url 'checkout' %}" class="button">Przejdź do Kasy</a>
 </body>
 </html>

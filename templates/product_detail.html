@@ -1,58 +1,179 @@
-<!-- templates/product_detail.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }}</title>
     <style>
-        .product-detail {
-            max-width: 800px;
-            margin: auto;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
         }
-        .product-detail img {
+        .product-detail {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .product-detail h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        .product-detail .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .product-detail .button:hover {
+            background-color: #004d99;
+        }
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .slider {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+        .slider img {
             max-width: 100%;
-            height: auto;
+            flex-shrink: 0;
+            border-radius: 10px;
+        }
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .slider-controls button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-controls button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .product-detail p {
+            font-size: 1.2em;
+            margin: 10px 0;
         }
         .product-detail nav {
-            margin-bottom: 20px;
+            margin: 20px 0;
+            text-align: center;
         }
         .product-detail nav a {
-            margin-right: 10px;
+            margin: 0 10px;
             text-decoration: none;
-            color: blue;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .product-detail nav a:hover {
+            text-decoration: underline;
         }
         .product-detail section {
-            margin-bottom: 40px;
+            margin: 40px 0;
+        }
+        .product-detail section h2 {
+            color: #0066cc;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .slider img {
+                max-width: 100%;
+            }
+            .product-detail {
+                padding: 15px;
+            }
+            .product-detail h1 {
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="product-detail">
         <h1>{{ product.name }}</h1>
-     <a href="{% url 'category_products' product.category.id %}" class="button">Back to Category</a>
-        <div class="product-images">
-            {% for image in images %}
-                <img src="{{ image.image.url }}" alt="{{ product.name }}">
-            {% endfor %}
+        <a href="{% url 'category_products' product.category.id %}" class="button">Powrót do kategorii</a>
+        <div class="slider-container">
+            <div class="slider">
+                {% for image in images %}
+                    <img src="{{ image.image.url }}" alt="{{ product.name }}">
+                {% empty %}
+                    <p>Brak zdjęcia produktu</p>
+                {% endfor %}
+            </div>
+            <div class="slider-controls">
+                <button id="prev-btn">&#10094;</button>
+                <button id="next-btn">&#10095;</button>
+            </div>
         </div>
-        <p>{{ product.price }} PLN</p>
-        <a href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
+        <p><strong>Cena:</strong> {{ product.price }} PLN</p>
+        <a href="{% url 'add_to_cart' product.id %}" class="button">Dodaj do koszyka</a>
         <nav>
-            <a href="#description">Description</a>
-            <a href="#specifications">Specifications</a>
-            <a href="#accessories">Accessories</a>
+            <a href="#description">Opis</a>
+            <a href="#specifications">Specyfikacje</a>
+            <a href="#accessories">Akcesoria</a>
         </nav>
         <section id="description">
-            <h2>Description</h2>
+            <h2>Opis</h2>
             <p>{{ product.description }}</p>
         </section>
         <section id="specifications">
-            <h2>Specifications</h2>
+            <h2>Specyfikacje</h2>
             <p>{{ product.specifications }}</p>
         </section>
         <section id="accessories">
-            <h2>Accessories</h2>
+            <h2>Akcesoria</h2>
             <p>{{ product.accessories }}</p>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.querySelector('.slider');
+            const slides = slider.children;
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            let index = 0;
+
+            const updateSlider = () => {
+                const slideWidth = slides[0].clientWidth;
+                slider.style.transform = `translateX(-${index * slideWidth}px)`;
+            };
+
+            prevBtn.addEventListener('click', () => {
+                index = (index > 0) ? index - 1 : slides.length - 1;
+                updateSlider();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                index = (index < slides.length - 1) ? index + 1 : 0;
+                updateSlider();
+            });
+
+            window.addEventListener('resize', updateSlider);
+        });
+    </script>
 </body>
 </html>

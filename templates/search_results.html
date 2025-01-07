@@ -1,16 +1,137 @@
-<!-- templates/search_results.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Search Results</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyniki wyszukiwania</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
+        }
+        .results-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+            margin-bottom: 20px;
+        }
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .product-item img {
+            max-width: 80px;
+            max-height: 80px;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+        .product-item .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .product-item .product-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .product-item .product-name:hover {
+            text-decoration: underline;
+        }
+        .product-item .product-price {
+            font-size: 1em;
+            color: #333;
+        }
+        .no-results {
+            text-align: center;
+            color: #999;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .back-home:hover {
+            background-color: #004d99;
+        }
+        @media (max-width: 768px) {
+            .results-container {
+                padding: 15px;
+            }
+            .product-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .product-item img {
+                margin-bottom: 10px;
+            }
+            .back-home {
+                font-size: 0.9em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Search Results for "{{ query }}"</h1>
-    <ul>
-        {% for product in products %}
-            <li><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Back to Home</a>
+    <div class="results-container">
+        <h1>Wyniki wyszukiwania dla "{{ query }}"</h1>
+        {% if products %}
+            <ul class="product-list">
+                {% for product in products %}
+                    <li class="product-item">
+                        {% if product.images.first %}
+                            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/80" alt="Brak zdjęcia">
+                        {% endif %}
+                        <div class="product-details">
+                            <a href="{% url 'product_detail' product.id %}" class="product-name">{{ product.name }}</a>
+                            <span class="product-price">{{ product.price }} PLN</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-results">Brak wyników dla podanego zapytania.</p>
+        {% endif %}
+        <a href="{% url 'home' %}" class="back-home">Powrót na stronę główną</a>
+    </div>
 </body>
 </html>

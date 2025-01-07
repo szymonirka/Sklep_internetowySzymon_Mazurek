@@ -1,32 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona Główna</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            background-color: #0066cc;
+            padding: 10px;
+        }
+        nav ul li {
+            margin-right: 20px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        form input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+        form button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #0066cc;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #004d99;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 10px 0;
+        }
+        ul li a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+        ul li a:hover {
+            text-decoration: underline;
+        }
+        .categories {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Our Store</h1>
+    <h1>Witamy w Naszym Sklepie</h1>
     <nav>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'view_cart' %}">Cart</a></li>
+            <li><a href="{% url 'home' %}">Strona Główna</a></li>
+            <li><a href="{% url 'view_cart' %}">Koszyk</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'user_profile' %}">Profile</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li><a href="{% url 'user_profile' %}">Profil</a></li>
+                <li><a href="{% url 'logout' %}">Wyloguj się</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}">Zaloguj się</a></li>
+                <li><a href="{% url 'signup' %}">Zarejestruj się</a></li>
             {% endif %}
         </ul>
     </nav>
     <form method="get" action="{% url 'search_results' %}">
-        <input type="text" name="q" placeholder="Search for products...">
-        <button type="submit">Search</button>
+        <input type="text" name="q" placeholder="Szukaj produktów..." id="search-box">
+        <button type="submit">Szukaj</button>
     </form>
-    <h2>Categories</h2>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="categories">
+        <h2>Kategorie</h2>
+        <ul>
+            {% for category in categories %}
+                <li><a href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        // JavaScript dla dynamicznego wyszukiwania w kategoriach
+        document.getElementById('search-box').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const categoryLinks = document.querySelectorAll('.categories ul li a');
+
+            categoryLinks.forEach(link => {
+                if (link.textContent.toLowerCase().includes(query)) {
+                    link.parentElement.style.display = '';
+                } else {
+                    link.parentElement.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

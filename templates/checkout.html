@@ -1,8 +1,84 @@
-<!-- templates/checkout.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
+        }
+        .checkout-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            width: 100%;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
+        }
+        #invoice-fields {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #004d99;
+        }
+        @media (max-width: 768px) {
+            .checkout-container {
+                padding: 15px;
+            }
+            input, select {
+                font-size: 0.9em;
+            }
+            button {
+                font-size: 0.9em;
+            }
+        }
+    </style>
     <script>
         function toggleInvoiceFields() {
             var invoiceFields = document.getElementById('invoice-fields');
@@ -11,51 +87,68 @@
     </script>
 </head>
 <body>
-    <h1>Checkout</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="shipping_address">Shipping Address:</label>
-        <input type="text" id="shipping_address" name="shipping_address" required><br>
-        <label for="street_address">Street Address:</label>
-        <input type="text" id="street_address" name="street_address" required><br>
-        <label for="postal_code">Postal Code:</label>
-        <input type="text" id="postal_code" name="postal_code" required><br>
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" required><br>
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required><br>
-        <label for="phone_number">Phone Number:</label>
-        <input type="text" id="phone_number" name="phone_number" required><br>
-        <label for="payment_method">Payment Method:</label>
-        <select id="payment_method" name="payment_method" required>
-            <option value="card">Karta</option>
-            <option value="blik">Blik</option>
-            <option value="paypal">PayPal</option>
-            <option value="cod">Za pobraniem</option>
-        </select><br>
-        <label for="shipping_method">Shipping Method:</label>
-        <select id="shipping_method" name="shipping_method" required>
-            <option value="home_delivery">Dostawa do domu</option>
-            <option value="parcel_locker">Dostawa do paczkomatu</option>
-        </select><br>
-        <label>
-            <input type="checkbox" id="invoice" name="invoice" onclick="toggleInvoiceFields()"> Order with Invoice
-        </label><br>
-        <div id="invoice-fields" style="display: none;">
-            <label for="company_name">Company Name or Full Name:</label>
-            <input type="text" id="company_name" name="company_name"><br>
-            <label for="company_address">Company Address:</label>
-            <input type="text" id="company_address" name="company_address"><br>
-            <label for="vat_number">NIP Number:</label>
-            <input type="text" id="vat_number" name="vat_number"><br>
-            <label for="contact">Contact:</label>
-            <input type="text" id="contact" name="contact"><br>
-            <label for="bank_account">Bank Account Number:</label>
-            <input type="text" id="bank_account" name="bank_account"><br>
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email"><br>
-        </div>
-        <button type="submit">Place Order</button>
-    </form>
+    <div class="checkout-container">
+        <h1>Kasa</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="shipping_address">Adres dostawy:</label>
+            <input type="text" id="shipping_address" name="shipping_address" required>
+
+            <label for="street_address">Ulica:</label>
+            <input type="text" id="street_address" name="street_address" required>
+
+            <label for="postal_code">Kod pocztowy:</label>
+            <input type="text" id="postal_code" name="postal_code" required>
+
+            <label for="city">Miasto:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="country">Kraj:</label>
+            <input type="text" id="country" name="country" required>
+
+            <label for="phone_number">Numer telefonu:</label>
+            <input type="text" id="phone_number" name="phone_number" required>
+
+            <label for="payment_method">Metoda płatności:</label>
+            <select id="payment_method" name="payment_method" required>
+                <option value="card">Karta</option>
+                <option value="blik">Blik</option>
+                <option value="paypal">PayPal</option>
+                <option value="cod">Za pobraniem</option>
+            </select>
+
+            <label for="shipping_method">Metoda dostawy:</label>
+            <select id="shipping_method" name="shipping_method" required>
+                <option value="home_delivery">Dostawa do domu</option>
+                <option value="parcel_locker">Dostawa do paczkomatu</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="invoice" name="invoice" onclick="toggleInvoiceFields()"> Zamówienie z fakturą
+            </label>
+
+            <div id="invoice-fields" style="display: none;">
+                <label for="company_name">Nazwa firmy lub imię i nazwisko:</label>
+                <input type="text" id="company_name" name="company_name">
+
+                <label for="company_address">Adres firmy:</label>
+                <input type="text" id="company_address" name="company_address">
+
+                <label for="vat_number">Numer NIP:</label>
+                <input type="text" id="vat_number" name="vat_number">
+
+                <label for="contact">Kontakt:</label>
+                <input type="text" id="contact" name="contact">
+
+                <label for="bank_account">Numer konta bankowego:</label>
+                <input type="text" id="bank_account" name="bank_account">
+
+                <label for="email">Adres email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+
+            <button type="submit">Złóż zamówienie</button>
+        </form>
+    </div>
 </body>
 </html>

@@ -1,29 +1,98 @@
-<!-- templates/user_profile.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>User Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Użytkownika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f5f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #0066cc;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px auto;
+            display: block;
+            width: fit-content;
+        }
+        .button:hover {
+            background-color: #004d99;
+        }
+        .details, .orders {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .details p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        ul li:last-child {
+            border-bottom: none;
+        }
+        ul li button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        ul li button:hover {
+            background-color: #cc0000;
+        }
+    </style>
 </head>
 <body>
-    <h1>User Profile</h1>
-     <a href="{% url 'home' %}" class="button">Go to Home</a>
-    <h2>User Details</h2>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <h2>Orders</h2>
-    <ul>
-        {% for order in orders %}
-            <li>
-                Order ID: {{ order.id }} - Total Price: {{ order.total_price }} PLN - Status: {{ order.status }}
-                {% if order.status != 'Cancelled' %}
-                    <form method="post" action="{% url 'cancel_order' order.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Cancel Order</button>
-                    </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Return to Home</a>
+    <h1>Profil Użytkownika</h1>
+    <a href="{% url 'home' %}" class="button">Powrót na Stronę Główną</a>
+    <div class="details">
+        <h2>Szczegóły Użytkownika</h2>
+        <p>Nazwa użytkownika: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+    </div>
+    <div class="orders">
+        <h2>Zamówienia</h2>
+        <ul>
+            {% for order in orders %}
+                <li>
+                    <span>ID Zamówienia: {{ order.id }} - Suma: {{ order.total_price }} PLN - Status: {{ order.status }}</span>
+                    {% if order.status != 'Anulowane' %}
+                        <form method="post" action="{% url 'cancel_order' order.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Anuluj Zamówienie</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
