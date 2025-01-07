@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Cart, CartItem, Order, Payment, Category
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+
 from django.http import HttpResponse
 from django.contrib.auth.views import LogoutView
 
@@ -163,3 +167,32 @@ def cancel_order(request, order_id):
     order.status = 'Cancelled'
     order.save()
     return redirect('user_profile')
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    return render(request, 'login.html')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+def custom_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+    return render(request, 'logout.html')

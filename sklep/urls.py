@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from sklep import views  # Import views from the shop app
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +38,8 @@ urlpatterns = [
     path('process_payment/<int:order_id>/', views.process_payment, name='process_payment'),
     path('profile/', views.user_profile, name='user_profile'),
     path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', views.custom_logout, name='logout'),
+    path('register/', views.register, name='register'),
     path('order_confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
