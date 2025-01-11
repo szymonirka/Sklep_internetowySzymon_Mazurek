@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Cart, CartItem, Order, Payment, Category
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
-from django.http import HttpResponse
-from django.contrib.auth.views import LogoutView
+
 
 def home(request):
     query = request.GET.get('q')
@@ -104,6 +103,9 @@ def decrease_quantity(request, product_id):
 @login_required
 def checkout(request):
     cart = get_object_or_404(Cart, user=request.user)
+    if not cart.items.exists():
+        messages.error(request, 'Your cart is empty. Please add items to your cart before proceeding to checkout.')
+        return redirect('view_cart')
     total_price = sum(item.product.price * item.quantity for item in cart.items.all())
     if request.method == 'POST':
         order = Order.objects.create(
